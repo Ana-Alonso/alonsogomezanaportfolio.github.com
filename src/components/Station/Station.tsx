@@ -54,15 +54,8 @@ export const Station: React.FC<StationProps> = ({ station, registerSection }) =>
       ref={sectionRef}
       className={`${styles.section} ${styles[`biome--${station.biome}`]}`}
       aria-label={`Estación: ${station.name}`}
+      style={{ backgroundImage: `url(${biomeImageMap[station.biome]})` }}
     >
-      <img
-        className={styles.biomeImage}
-        src={biomeImageMap[station.biome]}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-      />
 
       {/* Capa decorativa del bioma */}
       <div className={styles.biomeLayer} aria-hidden="true">

@@ -15,52 +15,80 @@ import { useEffect, useRef, useCallback } from "react";
 export function useScrollDetection(onActiveChange: (id: string) => void): {
   registerSection: (el: HTMLElement | null, id: string) => void;
 } {
-  // Referencia al observer para poder desconectarlo en cleanup
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  // Lista de secciones registradas para calcular la activa por posición real.
+  const sectionsRef = useRef<Array<{ id: string; el: HTMLElement }>>([]);
+  const activeIdRef = useRef<string | null>(null);
 
-  // Mantenemos el callback en una ref para evitar recrear el observer
-  // cada vez que cambia (p. ej. si App re-renderiza)
+  // Mantenemos el callback en una ref para no recrear listeners globales.
   const callbackRef = useRef(onActiveChange);
   useEffect(() => {
     callbackRef.current = onActiveChange;
-  });
+  }, [onActiveChange]);
 
-  // Inicializa el IntersectionObserver una sola vez
+  const updateActiveStation = useCallback(() => {
+    if (sectionsRef.current.length === 0) return;
+
+    const viewportCenter = window.innerHeight / 2;
+    let bestId: string | null = null;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    for (const section of sectionsRef.current) {
+      const rect = section.el.getBoundingClientRect();
+      const sectionCenter = rect.top + rect.height / 2;
+      const distance = Math.abs(sectionCenter - viewportCenter);
+
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestId = section.id;
+      }
+    }
+
+    if (bestId && bestId !== activeIdRef.current) {
+      activeIdRef.current = bestId;
+      callbackRef.current(bestId);
+    }
+  }, []);
+
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        // Filtra las que están intersectando y elige la de mayor ratio
-        const intersecting = entries.filter((e) => e.isIntersecting);
-        if (intersecting.length === 0) return;
+    let rafId = 0;
+    const onViewportChange = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updateActiveStation();
+      });
+    };
 
-        const best = intersecting.reduce((prev, curr) =>
-          curr.intersectionRatio > prev.intersectionRatio ? curr : prev,
-        );
+    window.addEventListener("scroll", onViewportChange, { passive: true });
+    window.addEventListener("resize", onViewportChange);
 
-        const id = (best.target as HTMLElement).dataset.stationId;
-        if (id) callbackRef.current(id);
-      },
-      {
-        // Activa solo cuando el centro de la sección está en el 40% central
-        rootMargin: "-30% 0px -30% 0px",
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
-      },
-    );
+    // Primera evaluación al montar listeners.
+    onViewportChange();
 
     return () => {
-      observerRef.current?.disconnect();
+      window.removeEventListener("scroll", onViewportChange);
+      window.removeEventListener("resize", onViewportChange);
+      if (rafId) window.cancelAnimationFrame(rafId);
     };
-  }, []); // Sin deps: se crea una sola vez
+  }, [updateActiveStation]);
 
-  /**
-   * Registra un elemento DOM como sección observable.
-   * Se llama desde el useEffect de cada <Station /> con su ref.
-   */
-  const registerSection = useCallback((el: HTMLElement | null, id: string) => {
-    if (!el || !observerRef.current) return;
-    el.dataset.stationId = id;
-    observerRef.current.observe(el);
-  }, []);
+  const registerSection = useCallback(
+    (el: HTMLElement | null, id: string) => {
+      if (!el) return;
+
+      const list = sectionsRef.current;
+      const index = list.findIndex((item) => item.id === id);
+
+      if (index >= 0) {
+        list[index] = { id, el };
+      } else {
+        list.push({ id, el });
+      }
+
+      updateActiveStation();
+    },
+    [updateActiveStation],
+  );
 
   return { registerSection };
 }
