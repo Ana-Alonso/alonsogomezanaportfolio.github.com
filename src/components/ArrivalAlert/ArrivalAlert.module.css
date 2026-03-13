@@ -1,0 +1,49 @@
+/* ── Banner fijo en la parte superior ── */
+.alert {
+  position: fixed;
+  top: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-alert);
+
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+
+  background-color: var(--color-bg-dark);
+  border: 3px solid var(--color-primary);
+  color: var(--color-primary);
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-xs);
+  padding: var(--space-3) var(--space-6);
+  white-space: nowrap;
+  letter-spacing: 2px;
+
+  box-shadow:
+    6px 6px 0 0 var(--color-shadow),
+    0 0 24px rgba(232, 197, 71, 0.25);
+
+  /* Aparece y desaparece con animación de pasos */
+  animation:
+    alert-in  0.25s steps(3, end) both,
+    alert-out 0.35s steps(3, end) 3.45s both;
+}
+
+@keyframes alert-in {
+  from { transform: translateX(-50%) translateY(-36px); opacity: 0; }
+  to   { transform: translateX(-50%) translateY(0);     opacity: 1; }
+}
+
+@keyframes alert-out {
+  from { opacity: 1; transform: translateX(-50%) translateY(0);    }
+  to   { opacity: 0; transform: translateX(-50%) translateY(-20px);}
+}
+
+.icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.text {
+  line-height: 1.6;
+}

@@ -1,0 +1,151 @@
+/* ── Contenedor fijo del tren ── */
+.wrapper {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Vías ── */
+.tracks {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92px;
+  z-index: calc(var(--z-stations) + 1);
+}
+
+.rails {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+
+.rail {
+  width: 8px;
+  height: 100%;
+  background-color: var(--color-rail);
+  border-left: 2px solid rgba(255, 255, 255, 0.12);
+  border-right: 2px solid rgba(0, 0, 0, 0.35);
+  box-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.sleepers {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.sleeper {
+  width: 74px;
+  height: 8px;
+  background-color: #5c3e1c;
+  border: 2px solid var(--color-shadow);
+  opacity: 0.86;
+}
+
+/* ── Animaciones del sprite ── */
+@keyframes train-vibrate {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) rotate(0.15deg);
+  }
+  50% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-1px) rotate(-0.1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+@keyframes train-board-shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(4px);
+  }
+  40% {
+    transform: translateX(-3px);
+  }
+  60% {
+    transform: translateX(3px);
+  }
+  80% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes train-depart-shake {
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-5px);
+  }
+  30% {
+    transform: translateX(5px);
+  }
+  45% {
+    transform: translateX(-4px);
+  }
+  60% {
+    transform: translateX(4px);
+  }
+  80% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.trainComposition {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: var(--z-train);
+  display: flex;
+  justify-content: center;
+}
+
+.spriteMotion {
+  animation: train-vibrate 0.35s steps(2, end) infinite;
+  transform-origin: bottom center;
+}
+
+.anim--boarding {
+  animation:
+    train-vibrate 0.18s steps(2, end) infinite,
+    train-board-shake 0.5s steps(5, end);
+}
+
+.anim--departing {
+  animation:
+    train-vibrate 0.1s steps(2, end) infinite,
+    train-depart-shake 0.7s steps(7, end);
+}
+
+.trainSprite {
+  width: clamp(120px, 16vw, 170px);
+  height: auto;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.35));
+}

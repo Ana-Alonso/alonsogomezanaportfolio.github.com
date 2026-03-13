@@ -1,0 +1,14 @@
+/* ── Layout raíz de la aplicación ── */
+.app {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ── Área de scroll principal ── */
+.main {
+  position: relative;
+  z-index: var(--z-stations);
+  /* El tren (fixed, bottom: 40px) ocupa ~120px → no necesita padding
+     porque cada Station ya tiene padding-bottom: 160px */
+}

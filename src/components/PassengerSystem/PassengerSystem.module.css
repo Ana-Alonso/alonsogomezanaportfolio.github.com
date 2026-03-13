@@ -1,0 +1,88 @@
+/* ── Contenedor: sobre las vías, centrado con el tren ── */
+.container {
+  position: fixed;
+  bottom: 156px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: calc(var(--z-train) + 1);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  pointer-events: none;
+}
+
+/* ── Sprite de pasajero (pixel art CSS) ── */
+.passenger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Cabeza cuadrada */
+.head {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-shadow);
+  image-rendering: pixelated;
+}
+
+/* Cuerpo rectangular */
+.body {
+  width: 16px;
+  height: 14px;
+  border: 2px solid var(--color-shadow);
+  border-top: none;
+}
+
+/* Piernas: dos piezas cuadradas */
+.legs {
+  display: flex;
+  gap: 2px;
+}
+
+.legs::before,
+.legs::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 8px;
+  background-color: #2a1a08;
+  border: 2px solid var(--color-shadow);
+}
+
+/* ── Animación: subida al tren ── */
+@keyframes board-train {
+  0%   { transform: translateX(70px);  opacity: 0;   }
+  20%  { transform: translateX(40px);  opacity: 1;   }
+  65%  { transform: translateX(0px);   opacity: 1;   }
+  85%  { transform: translateX(-10px); opacity: 0.6; }
+  100% { transform: translateX(-22px); opacity: 0;   }
+}
+
+.boarding .passenger {
+  animation: board-train 1.6s steps(8, end) both;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ── Animación: bajada del tren ── */
+@keyframes exit-train {
+  0%   { transform: translateX(-22px); opacity: 0;   }
+  20%  { transform: translateX(-10px); opacity: 0.6; }
+  50%  { transform: translateX(0px);   opacity: 1;   }
+  80%  { transform: translateX(40px);  opacity: 1;   }
+  100% { transform: translateX(80px);  opacity: 0;   }
+}
+
+.departing .passenger {
+  animation: exit-train 1.6s steps(8, end) both;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (max-width: 768px) {
+  .container {
+    bottom: 138px;
+    gap: var(--space-2);
+  }
+}

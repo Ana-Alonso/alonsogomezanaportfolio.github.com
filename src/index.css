@@ -1,0 +1,181 @@
+/* ================================================================
+   RAILWAY PORTFOLIO — ESTILOS GLOBALES
+   Pixel Art 32-bit · Temática ferroviaria
+   ================================================================ */
+
+/* ── Variables CSS: paleta y tokens de diseño ── */
+:root {
+  /* Oscuros de fondo */
+  --color-bg-dark:       #0d0d1a;
+  --color-bg-panel:      #1a1a2e;
+  --color-bg-card:       #16213e;
+
+  /* Acento principal: dorado de tren */
+  --color-primary:       #e8c547;
+  --color-primary-dark:  #b8952a;
+
+  /* Acento secundario: rojo señal */
+  --color-secondary:     #c0392b;
+
+  /* Semáforo verde */
+  --color-accent:        #27ae60;
+
+  /* Raíles y estructuras */
+  --color-rail:          #4a4a6a;
+
+  /* Tipografía */
+  --color-text:          #f0e6c8;   /* Crema pergamino */
+  --color-text-dim:      #8a7a60;
+  --color-border:        #2e2e4e;
+  --color-shadow:        #000000;
+
+  /* Gradientes de bioma */
+  --biome-meadow-from:   #0e2010;
+  --biome-meadow-to:     #1e4a18;
+  --biome-mountain-from: #1a0d2e;
+  --biome-mountain-to:   #3d1f5c;
+  --biome-city-from:     #0e0e1e;
+  --biome-city-to:       #2a2a3e;
+  --biome-coast-from:    #060e22;
+  --biome-coast-to:      #0a2a5e;
+
+  /* Tipografía pixel art */
+  --font-pixel: 'Press Start 2P', 'Courier New', monospace;
+
+  /* Escala tipográfica (base 16px → sistema retro) */
+  --font-size-xs:   0.5rem;    /*  8px */
+  --font-size-sm:   0.625rem;  /* 10px */
+  --font-size-base: 0.75rem;   /* 12px */
+  --font-size-md:   0.875rem;  /* 14px */
+  --font-size-lg:   1rem;      /* 16px */
+  --font-size-xl:   1.25rem;   /* 20px */
+  --font-size-2xl:  1.5rem;    /* 24px */
+
+  /* Espaciado en múltiplos de 4px */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-12: 48px;
+
+  /* Capas Z: define el orden de renderizado de toda la UI */
+  --z-background: 0;
+  --z-tracks:     10;
+  --z-stations:   20;
+  --z-train:      30;
+  --z-nav:        40;
+  --z-alert:      50;
+  --z-dialog:     60;
+  --z-ticket:     70;
+}
+
+/* ── Reset global ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-pixel);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text);
+  overflow-x: hidden;
+  /* Desactivar suavizado para mantener la estética pixelada */
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+}
+
+/* CRÍTICO: todas las imágenes se renderizan en modo pixel art */
+img,
+canvas,
+svg {
+  image-rendering: -webkit-optimize-contrast; /* Safari */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-pixel);
+  cursor: pointer;
+}
+
+/* ── Scrollbar personalizado ── */
+::-webkit-scrollbar        { width: 8px; }
+::-webkit-scrollbar-track  { background: var(--color-bg-dark); }
+::-webkit-scrollbar-thumb  {
+  background: var(--color-primary);
+  border: 2px solid var(--color-bg-dark);
+}
+
+/* ── Selección de texto ── */
+::selection {
+  background: var(--color-primary);
+  color: var(--color-bg-dark);
+}
+
+/* ── Utilidades globales ── */
+
+/* Borde "pixel art" de 2px con box-shadow */
+.pixel-border {
+  box-shadow:
+    -2px  0   0 0 var(--color-shadow),
+     2px  0   0 0 var(--color-shadow),
+     0   -2px 0 0 var(--color-shadow),
+     0    2px 0 0 var(--color-shadow);
+}
+
+.pixel-border-gold {
+  box-shadow:
+    -2px  0   0 0 var(--color-primary),
+     2px  0   0 0 var(--color-primary),
+     0   -2px 0 0 var(--color-primary),
+     0    2px 0 0 var(--color-primary);
+}
+
+/* ── Animaciones reutilizables ── */
+
+/* Parpadeo tipo pantalla retro */
+@keyframes pixel-blink {
+  0%,  49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Aparición con zoom discreto */
+@keyframes pixel-appear {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Deslizamiento desde abajo */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Accesibilidad ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

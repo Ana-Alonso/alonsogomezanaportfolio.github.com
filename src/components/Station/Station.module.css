@@ -1,0 +1,287 @@
+/* ── Sección base (100vh por parada) ── */
+.section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: var(--space-12) var(--space-8) 160px var(--space-8);
+  /* 160px bottom: deja espacio para el tren fijo */
+  overflow: hidden;
+}
+
+/* ── Imagen del bioma (vertical, lazy) ── */
+.biomeImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+  image-rendering: pixelated;
+  z-index: 0;
+}
+
+/* ── Biomas: gradiente de refuerzo sobre imagen ── */
+.biome--meadow {
+  background: linear-gradient(160deg, #0f2812 0%, #1d4b1f 100%);
+}
+
+.biome--mountain {
+  background: linear-gradient(160deg, #26163d 0%, #53307a 100%);
+}
+
+.biome--city {
+  background: linear-gradient(160deg, #131326 0%, #36364f 100%);
+}
+
+.biome--coast {
+  background: linear-gradient(160deg, #0c1b3f 0%, #154c93 100%);
+}
+
+/* ── Capa decorativa de terreno ── */
+.biomeLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.biomeTerrain {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: rgba(0, 0, 0, 0.25);
+  /* Textura de suelo pixel art */
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 5px,
+      rgba(0,0,0,0.15) 5px,
+      rgba(0,0,0,0.15) 7px
+    );
+}
+
+/* ── Caja de estación ── */
+.stationBox {
+  position: relative;
+  z-index: 1;
+  width: min(520px, 88vw);
+  background-color: rgba(13, 13, 26, 0.92);
+  border: 3px solid var(--color-border);
+  box-shadow:
+    6px 6px 0 0 var(--color-shadow),
+    0 0 0 1px rgba(232, 197, 71, 0.15);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  backdrop-filter: blur(4px);
+  animation: slide-up 0.5s steps(5, end) both;
+}
+
+.stationBoxInicio {
+  align-self: flex-start;
+  margin-left: clamp(12px, 5vw, 84px);
+  width: min(390px, 40vw);
+  max-height: min(82vh, 780px);
+  overflow-y: auto;
+}
+
+@media (max-width: 1024px) {
+  .stationBoxInicio {
+    margin-left: clamp(8px, 3vw, 28px);
+    width: min(360px, 48vw);
+  }
+}
+
+@media (max-width: 768px) {
+  .stationBoxInicio {
+    margin-left: 0;
+    width: min(520px, 88vw);
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+/* ── Señal de andén ── */
+.signalBoard {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.platformBadge {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  color: var(--color-primary);
+  border: 3px solid var(--color-primary);
+  padding: var(--space-1) var(--space-3);
+  min-width: 52px;
+  text-align: center;
+  line-height: 1.4;
+  box-shadow: 2px 2px 0 0 var(--color-shadow);
+}
+
+.signalInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stationName {
+  font-size: var(--font-size-md);
+  font-weight: normal;
+  color: var(--color-text);
+  letter-spacing: 3px;
+  line-height: 1.4;
+}
+
+.platformLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+  letter-spacing: 1px;
+}
+
+/* ── Divider ── */
+.divider {
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-border) 0px,
+    var(--color-border) 8px,
+    transparent 8px,
+    transparent 14px
+  );
+}
+
+/* ── Descripción ── */
+.description {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+  line-height: 2.2;
+}
+
+.profileWrap {
+  width: min(260px, 76vw);
+  border: 3px solid var(--color-primary);
+  box-shadow: 4px 4px 0 0 var(--color-shadow);
+  overflow: hidden;
+}
+
+.stationBoxInicio .profileWrap {
+  width: min(220px, 30vw);
+}
+
+@media (max-width: 1024px) {
+  .stationBoxInicio .profileWrap {
+    width: min(210px, 42vw);
+  }
+}
+
+@media (max-width: 768px) {
+  .stationBoxInicio .profileWrap {
+    width: min(260px, 76vw);
+  }
+}
+
+.profileImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+/* ── Lista de detalles ── */
+.details {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.detailItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  line-height: 2;
+}
+
+.detailBullet {
+  color: var(--color-accent);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── Skills ── */
+.skillsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.skillRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.skillName {
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+.skillBar {
+  display: flex;
+  gap: 3px;
+}
+
+.pip {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-border);
+  background-color: transparent;
+  flex-shrink: 0;
+}
+
+.pipFull {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary-dark);
+}
+
+/* ── Botón de interacción ── */
+.interactBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  font-family: var(--font-pixel);
+  font-size: var(--font-size-xs);
+  color: var(--color-bg-dark);
+  background-color: var(--color-primary);
+  border: 3px solid var(--color-shadow);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 3px 3px 0 0 var(--color-shadow);
+  transition: transform 0.05s step-start, box-shadow 0.05s step-start;
+}
+
+.interactBtn:hover {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 0 var(--color-shadow);
+}
+
+.interactBtn:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
